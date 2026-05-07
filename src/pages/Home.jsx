@@ -1,22 +1,21 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import Hero from "../components/sections/Hero";
 import FeaturedCategories from "../components/sections/FeaturedCategories";
 import ReviewsSection from "../components/sections/ReviewsSection";
 import MenuItemCard from "../components/ui/MenuItemCard";
-import { menuItems, restaurantInfo } from "../data/menu";
-import { Phone, MapPin, Clock, Truck, UtensilsCrossed, Package, Star } from "lucide-react";
-
-// Top picks from each category
-const featuredItems = [
-  menuItems.burgers[0],
-  menuItems.pizza[1],
-  menuItems.shawarma[0],
-  menuItems.fries[2],
-  menuItems.deals[0],
-  menuItems.drinks[10],
-];
+import { restaurantInfo } from "../data/menu";
+import { Phone, MapPin, Star } from "lucide-react";
+import api from "../config/api";
 
 export default function Home() {
+  const [featuredItems, setFeaturedItems] = useState([]);
+
+  useEffect(() => {
+    api("/menu?featured=true&limit=6").then((data) => {
+      if (data.success) setFeaturedItems(data.data);
+    });
+  }, []);
   return (
     <main>
       <Hero />
